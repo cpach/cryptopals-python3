@@ -3,8 +3,16 @@
 
 from base64 import b64encode
 
-input = bytes.fromhex("49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d")
+input_string = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"
 
-output = b64encode(input)
+input_bytes = bytes.fromhex(input_string)
 
-print(str(object=output, encoding='utf-8'))
+output_bytes = b64encode(input_bytes)
+
+output_string = str(object=output_bytes, encoding='utf-8')
+
+output_message = """SET 01 PROBLEM 01: Convert hex to base64 and back
+Hex input:        {}
+Output in Base64: {}"""
+
+print(output_message.format(input_string, output_string))
