@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+from binascii import hexlify
+
+def fixed_xor(first_buffer, second_buffer):
+    output = b''
+    for x, y in zip(first_buffer, second_buffer):
+        output += bytes([x ^ y])
+    return output
+
+input_a = "1c0111001f010100061a024b53535009181c"
+
+input_b = "686974207468652062756c6c277320657965"
+
+result_bytes = fixed_xor(bytes.fromhex(input_a), bytes.fromhex(input_b))
+
+result_string = str(object=hexlify(result_bytes), encoding='utf-8')
+
+output_message = """SET 01 PROBLEM 02: Fixed XOR
+First buffer:  {}
+Second buffer: {}
+Result:        {}"""
+
+print(output_message.format(input_a, input_b, result_string))
