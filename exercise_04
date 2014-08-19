@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+
+from operator import itemgetter
+from libpals.util import xor_find_singlechar_key
+
+
+def get_winner(input_file):
+    indata = [line.strip() for line in open(input_file)]
+
+    candidates = list()
+
+    for line in indata:
+        ciphertext = bytes.fromhex(line)
+        result = xor_find_singlechar_key(ciphertext)
+        result['ciphertext_hex'] = line
+        candidates.append(result)
+
+    winner = max(candidates, key=itemgetter('score'))
+
+    return winner
+
+
+winner = get_winner('data/4.txt')
+
+output_message = """SET 01 PROBLEM 04: Detect single-character XOR
+Key:
+  Decimal: {}
+  Hex: {}
+  ASCII: {}
+Hex: {}
+Message: {}"""
+
+print(output_message.format(winner['key'],
+                            hex(winner['key']),
+                            chr(winner['key']),
+                            winner['ciphertext_hex'],
+                            str(object=winner['plaintext'], encoding='ascii')))
