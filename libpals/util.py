@@ -52,6 +52,7 @@ def xor_find_singlechar_key(ciphertext):
         for byte in decoded_input:
             char_score = character_frequency.get(chr(byte), 0)
             total_score += char_score
+
         candidates.append((key_candidate, total_score))
 
     return max(candidates, key=itemgetter(1))
