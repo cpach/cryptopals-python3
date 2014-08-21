@@ -47,12 +47,14 @@ def xor_find_singlechar_key(ciphertext):
 
     for key_candidate in range(256):
         total_score = 0
-        decoded_input = xor_singlechar(ciphertext, key_candidate)
+        plaintext_candidate = xor_singlechar(ciphertext, key_candidate)
 
         for byte in decoded_input:
             char_score = character_frequency.get(chr(byte), 0)
             total_score += char_score
 
-        candidates.append((key_candidate, total_score))
+        # We might as well include the plaintext in the output since
+        # it’s used in some of the challenges.
+        candidates.append((key_candidate, total_score, plaintext_candidate))
 
     return max(candidates, key=itemgetter(1))
