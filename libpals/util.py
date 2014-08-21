@@ -49,7 +49,7 @@ def xor_find_singlechar_key(ciphertext):
         total_score = 0
         plaintext_candidate = xor_singlechar(ciphertext, key_candidate)
 
-        for byte in decoded_input:
+        for byte in plaintext_candidate:
             char_score = character_frequency.get(chr(byte), 0)
             total_score += char_score
 
