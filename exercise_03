@@ -7,7 +7,7 @@ input_string = '1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b
 
 ciphertext = bytes.fromhex(input_string)
 
-key = xor_find_singlechar_key(ciphertext)[0]
+key = xor_find_singlechar_key(ciphertext)['key']
 
 plaintext = xor_singlechar(ciphertext, key)
 

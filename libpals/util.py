@@ -55,6 +55,14 @@ def xor_find_singlechar_key(ciphertext):
 
         # We might as well include the plaintext in the output since
         # it’s used in some of the challenges.
-        candidates.append((key_candidate, total_score, plaintext_candidate))
+        result = {
+            'key': key_candidate,
+            'score': total_score,
+            'plaintext': plaintext_candidate
+        }
 
-    return max(candidates, key=itemgetter(1))
+        candidates.append(result)
+
+    winner = max(candidates, key=itemgetter('score'))
+
+    return winner
