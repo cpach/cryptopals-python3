@@ -66,3 +66,8 @@ def xor_find_singlechar_key(ciphertext):
     winner = max(candidates, key=itemgetter('score'))
 
     return winner
+
+
+def popcount(x):
+    # This function counts the number of set bits in x
+    return bin(x).count('1')
