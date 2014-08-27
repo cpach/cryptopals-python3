@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from operator import itemgetter
 from libpals.util import xor_singlechar, xor_find_singlechar_key
 
 input_string = '1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736'
