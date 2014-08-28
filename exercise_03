@@ -6,9 +6,9 @@ input_string = '1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b
 
 ciphertext = bytes.fromhex(input_string)
 
-key = xor_find_singlechar_key(ciphertext)['key']
+result = xor_find_singlechar_key(ciphertext)
 
-plaintext = xor_singlechar(ciphertext, key)
+plaintext = result['plaintext']
 
 output_message = """SET 01 PROBLEM 03: Single-character XOR Cipher
 Input: {}
@@ -19,7 +19,7 @@ Key:
 Message: {}"""
 
 print(output_message.format(input_string,
-                            key,
-                            hex(key),
-                            chr(key),
+                            result['key'],
+                            hex(result['key']),
+                            chr(result['key']),
                             str(object=plaintext, encoding='ascii')))
