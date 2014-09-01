@@ -69,5 +69,7 @@ def xor_find_singlechar_key(ciphertext):
 
 
 def popcount(x):
-    # This function counts the number of set bits in x
+    """Return the number of set bits in an integer (a.k.a the Hamming weight).
+    """
+
     return bin(x).count('1')
