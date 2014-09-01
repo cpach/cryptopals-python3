@@ -73,3 +73,17 @@ def popcount(x):
     """
 
     return bin(x).count('1')
+
+
+def hamming_distance(a, b):
+    """Take two bytes objects and return the number of differing bits
+    (a.k.a. the Hamming distance).
+    """
+
+    total_score = 0
+
+    for (byte_a, byte_b) in zip(a, b):
+        current_score = popcount(byte_a ^ byte_b)
+        total_score += current_score
+
+    return total_score
