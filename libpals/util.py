@@ -87,3 +87,9 @@ def hamming_distance(a, b):
         total_score += current_score
 
     return total_score
+
+
+def extend_buffer(buffer, length):
+    """Take a string or bytes object and repeat for "length" characters.
+    """
+    return (buffer*length)[:length]
