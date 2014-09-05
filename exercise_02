@@ -2,17 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from binascii import hexlify
-
-def fixed_xor(first_buffer, second_buffer):
-    if (len(first_buffer) != len(second_buffer)):
-        raise ValueError('Both arguments need to have the same length')
-
-    output = b''
-
-    for x, y in zip(first_buffer, second_buffer):
-        output += bytes([x ^ y])
-
-    return output
+from libpals.util import fixed_xor
 
 input_a = "1c0111001f010100061a024b53535009181c"
 

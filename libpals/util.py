@@ -93,3 +93,15 @@ def extend_buffer(buffer, length):
     """Take a string or bytes object and repeat for "length" characters.
     """
     return (buffer*length)[:length]
+
+
+def fixed_xor(first_buffer, second_buffer):
+    if (len(first_buffer) != len(second_buffer)):
+        raise ValueError('Both arguments need to have the same length')
+
+    output = b''
+
+    for x, y in zip(first_buffer, second_buffer):
+        output += bytes([x ^ y])
+
+    return output
