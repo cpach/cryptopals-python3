@@ -105,3 +105,11 @@ def fixed_xor(first_buffer, second_buffer):
         output += bytes([x ^ y])
 
     return output
+
+
+def xor_repeatedkey(plaintext, key):
+    repeated_key = extend_buffer(key, len(plaintext))
+
+    ciphertext = fixed_xor(plaintext, repeated_key)
+
+    return ciphertext
