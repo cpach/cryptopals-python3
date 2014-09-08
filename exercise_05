@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+
+from binascii import hexlify
+from libpals.util import xor_repeatedkey
+
+input_bytes = b"Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal"
+
+input_string = str(object=input_bytes, encoding='utf-8')
+
+key_bytes = b"ICE"
+
+key_string = str(object=key_bytes, encoding='utf-8')
+
+ciphertext = xor_repeatedkey(input_bytes, key_bytes)
+
+output_string = str(object=hexlify(ciphertext), encoding='utf-8')
+
+output_message = """SET 01 PROBLEM 05: Implement repeating-key XOR
+Message: {}
+Key: {}
+Ciphertext: {}"""
+
+print(output_message.format(input_string, key_string, output_string))
