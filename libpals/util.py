@@ -113,3 +113,14 @@ def xor_repeatedkey(plaintext, key):
     ciphertext = fixed_xor(plaintext, repeated_key)
 
     return ciphertext
+
+
+def divide(input, denominator):
+    """Take a string or bytes object and divide it into parts of "denominator"
+    length.
+    """
+    result = []
+    for i in range(0, len(input), denominator):
+        chunk = input[i:i+denominator]
+        result.append(chunk)
+    return result
