@@ -124,3 +124,19 @@ def divide(input, denominator):
         chunk = input[i:i+denominator]
         result.append(chunk)
     return result
+
+
+def transpose(list_of_chunks):
+    max_chunklength = len(list_of_chunks[0])
+
+    result = b''
+
+    for position in range(0, max_chunklength):
+        for chunk in list_of_chunks:
+            try:
+                char = chunk[position]
+                result += bytes([char])
+            except IndexError:
+                break
+
+    return result
