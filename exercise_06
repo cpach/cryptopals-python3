@@ -1,0 +1,33 @@
+#!/usr/bin/env python3
+
+from base64 import b64decode
+from libpals.util import xor_repeatedkey, xor_find_multichar_key
+
+
+def get_indata(input_file):
+    indata = b''
+    with open(input_file) as input:
+        indata = "".join(line.strip() for line in input)
+    return indata
+
+
+indata = get_indata('data/6.txt')
+
+ciphertext = b64decode(indata)
+
+key_bytes = xor_find_multichar_key(ciphertext)
+
+key_string = str(object=key_bytes, encoding='utf-8')
+
+plaintext_bytes = xor_repeatedkey(ciphertext, key_bytes)
+
+plaintext_excerpt = str(object=plaintext_bytes[:242], encoding='utf-8')
+
+output_message = """SET 01 PROBLEM 06: Break repeating-key XOR
+Key: {}
+
+Plaintext (first 242 bytes):
+
+{}"""
+
+print(output_message.format(key_string, plaintext_excerpt))

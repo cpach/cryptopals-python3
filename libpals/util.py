@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from operator import itemgetter
+from itertools import combinations
 
 character_frequency = {
     'e': 27,
@@ -144,3 +145,50 @@ def transpose(list_of_chunks):
         result.append(new_chunk)
 
     return result
+
+
+def xor_find_multichar_key(ciphertext):
+    def get_aggregated_sample_score(keysize):
+        number_of_samples = 6
+
+        sample_material = ciphertext[:(keysize * number_of_samples)]
+
+        chunks = divide(sample_material, keysize)
+
+        total_score = 0
+
+        # After advise from Rami__ in the #cryptopals channel on Freenode, I
+        # have chosen to take a total of six samples and compare every
+        # combination of these samples.
+        for (x, y) in combinations(chunks, 2):
+            total_score += hamming_distance(x, y)
+
+        normalized_score = total_score / keysize
+
+        return normalized_score
+
+
+    def determine_keysize():
+        keysize_candidates = []
+
+        for i in range(2, 41):
+            keysize_candidates.append((i, get_aggregated_sample_score(i)))
+
+        best_candidate = min(keysize_candidates, key=itemgetter(1))
+
+        keysize = best_candidate[0]
+
+        return keysize
+
+
+    keysize = determine_keysize()
+
+    key_material = transpose(divide(ciphertext, keysize))
+
+    plaintext = b''
+
+    for char in key_material:
+        char_value = xor_find_singlechar_key(char)["key"]
+        plaintext += bytes([char_value])
+
+    return plaintext
