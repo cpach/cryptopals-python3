@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 
-from libpals.util import xor_find_singlechar_key, hamming_distance, fixed_xor
+from libpals.util import (
+    xor_find_singlechar_key,
+    hamming_distance,
+    fixed_xor
+)
 
 def test_xor_find_singlechar_key():
     input = '1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736'
