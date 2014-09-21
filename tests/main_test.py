@@ -25,6 +25,18 @@ def test_fixed_xor():
     assert fixed_xor(input, key) == b"the kid don't play"
 
 
-def test_transpose():
-    chunks = [b'adg', b'beh', b'cfi']
-    assert transpose(chunks) == b'abcdefghi'
+def test_transpose_2():
+    chunks = [b'AN', b'BO', b'CP', b'DQ', b'ER', b'FS', b'GT', b'HU', b'IV',
+              b'JW', b'KX', b'LY', b'MZ']
+    assert transpose(chunks) == [b'ABCDEFGHIJKLM', b'NOPQRSTUVWXYZ']
+
+
+def test_transpose_3():
+    chunks = [b'AJS', b'BKT', b'CLU', b'DMV', b'ENW', b'FOX', b'GPY', b'HQZ',
+              b'IR']
+    assert transpose(chunks) == [b'ABCDEFGHI', b'JKLMNOPQR', b'STUVWXYZ']
+
+
+def test_transpose_4():
+    chunks = [b'AHOU', b'BIPV', b'CJQW', b'DKRX', b'ELSY', b'FMTZ', b'GN']
+    assert transpose(chunks) == [b'ABCDEFG', b'HIJKLMN', b'OPQRST', b'UVWXYZ']
