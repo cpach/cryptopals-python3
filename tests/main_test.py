@@ -15,7 +15,7 @@ def test_xor_find_singlechar_key():
     assert result['plaintext']  == b"Cooking MC's like a pound of bacon"
 
 
-def test_hamming_distance():
+def test_hamming_distance_a():
     assert hamming_distance(b"this is a test", b"wokka wokka!!!") == 37
 
 
