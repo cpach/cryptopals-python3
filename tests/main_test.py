@@ -19,6 +19,10 @@ def test_hamming_distance_a():
     assert hamming_distance(b"this is a test", b"wokka wokka!!!") == 37
 
 
+def test_hamming_distance_b():
+    assert hamming_distance(b'\x00\x00', b'\xff\xff') == 16
+
+
 def test_fixed_xor():
     input = bytes.fromhex("1c0111001f010100061a024b53535009181c")
     key = bytes.fromhex("686974207468652062756c6c277320657965")
