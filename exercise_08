@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+
+from binascii import hexlify
+from operator import itemgetter
+from libpals.util import xor_find_singlechar_key, divide
+
+
+def rank_ciphertext(ciphertext):
+    chunks = divide(ciphertext, 16)
+
+    total_score = 0
+
+    for c in set(chunks):
+        score = chunks.count(c)
+        if score > 1:
+            total_score += score
+
+    return total_score
+
+
+def get_candidates(input_list):
+    candidate_list = []
+    for input_line in enumerate(input_list, start=1):
+        candidate = {
+            'line_number': input_line[0],
+            'ciphertext': bytes.fromhex(input_line[1])
+        }
+        candidate_list.append(candidate)
+    return candidate_list
+
+
+indata = [line.rstrip() for line in open('data/8.txt')]
+
+candidate_list = get_candidates(indata)
+
+for candidate in candidate_list:
+    candidate['score'] = rank_ciphertext(candidate['ciphertext'])
+
+winner = max(candidate_list, key=itemgetter('score'))
+
+output_message = """SET 01 PROBLEM 08: Detect AES in ECB mode
+Line number: {}
+Score [i.e. the number of repeated 16-byte blocks]: {}
+Ciphertext (hex): {}"""
+
+print(output_message.format(winner['line_number'],
+                            winner['score'],
+                            str(object=hexlify(winner['ciphertext']),
+                                encoding='utf-8')))
