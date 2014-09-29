@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+
+from libpals.util import pkcs7pad
+
+plaintext = b'YELLOW SUBMARINE'
+padded_plaintext = pkcs7pad(plaintext, 20)
+
+output_message = """SET 02 PROBLEM 09: Implement PKCS#7 padding
+Input: {}
+Result: {}"""
+
+print(output_message.format(plaintext, padded_plaintext))

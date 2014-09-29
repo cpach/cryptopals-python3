@@ -192,3 +192,9 @@ def xor_find_multichar_key(ciphertext):
         plaintext += bytes([char_value])
 
     return plaintext
+
+
+def pkcs7pad(input_bytes, k):
+    n = k - (len(input_bytes) % k)
+    result = input_bytes + (n * bytes([n]))
+    return result
