@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+
+from base64 import b64decode
+from Crypto.Cipher import AES
+from libpals.util import divide, fixed_xor
+
+
+def decrypt(key, iv, ciphertext):
+    cipher = AES.new(key, AES.MODE_ECB)
+
+    plaintext = b''
+
+    diffblock = iv
+
+    for chunk in divide(ciphertext, 16):
+        xor_bytes = cipher.decrypt(chunk)
+
+        current_plaintext_chunk = fixed_xor(xor_bytes, diffblock)
+
+        plaintext += current_plaintext_chunk
+
+        diffblock = chunk
+
+    return plaintext
+
+
+key = b'YELLOW SUBMARINE'
+
+iv = b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+
+ciphertext = b64decode(open('data/10.txt', 'r').read())
+
+plaintext= decrypt(key, iv, ciphertext)
+
+output_message = """SET 02 PROBLEM 10: Implement CBC mode
+
+Plaintext (first 242 bytes):
+
+{}"""
+
+print(output_message.format(plaintext[:242].decode("ascii")))
