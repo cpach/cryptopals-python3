@@ -4,7 +4,8 @@ from libpals.util import (
     xor_find_singlechar_key,
     hamming_distance,
     fixed_xor,
-    transpose
+    transpose,
+    pkcs7pad
 )
 
 def test_xor_find_singlechar_key():
@@ -44,3 +45,8 @@ def test_transpose_3():
 def test_transpose_4():
     chunks = [b'AHOU', b'BIPV', b'CJQW', b'DKRX', b'ELSY', b'FMTZ', b'GN']
     assert transpose(chunks) == [b'ABCDEFG', b'HIJKLMN', b'OPQRST', b'UVWXYZ']
+
+
+def test_pkcs7pad():
+    expected_bytes = b'YELLOW SUBMARINE\x04\x04\x04\x04'
+    assert pkcs7pad(b'YELLOW SUBMARINE', 20) == expected_bytes
