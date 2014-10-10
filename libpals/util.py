@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from Crypto.Cipher import AES
 from operator import itemgetter
 from itertools import combinations
 
@@ -199,3 +200,41 @@ def pkcs7pad(input_bytes, k):
     n = k - (len(input_bytes) % k)
     result = input_bytes + (n * bytes([n]))
     return result
+
+
+def aes_128_cbc_encrypt(key, iv, plaintext):
+    cipher = AES.new(key, AES.MODE_ECB)
+
+    ciphertext = b''
+
+    diffblock = iv
+
+    for plaintext_chunk in divide(plaintext, 16):
+        xor_bytes = fixed_xor(plaintext_chunk, diffblock)
+
+        current_ciphertext_chunk = cipher.encrypt(xor_bytes)
+
+        ciphertext += current_ciphertext_chunk
+
+        diffblock = current_ciphertext_chunk
+
+    return ciphertext
+
+
+def aes_128_cbc_decrypt(key, iv, ciphertext):
+    cipher = AES.new(key, AES.MODE_ECB)
+
+    plaintext = b''
+
+    diffblock = iv
+
+    for chunk in divide(ciphertext, 16):
+        xor_bytes = cipher.decrypt(chunk)
+
+        current_plaintext_chunk = fixed_xor(xor_bytes, diffblock)
+
+        plaintext += current_plaintext_chunk
+
+        diffblock = chunk
+
+    return plaintext

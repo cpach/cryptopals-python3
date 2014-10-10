@@ -1,47 +1,12 @@
 #!/usr/bin/env python3
 
 from base64 import b64decode
-from Crypto.Cipher import AES
-from libpals.util import divide, fixed_xor
-
-
-def encrypt(key, iv, plaintext):
-    cipher = AES.new(key, AES.MODE_ECB)
-
-    ciphertext = b''
-
-    diffblock = iv
-
-    for plaintext_chunk in divide(plaintext, 16):
-        xor_bytes = fixed_xor(plaintext_chunk, diffblock)
-
-        current_ciphertext_chunk = cipher.encrypt(xor_bytes)
-
-        ciphertext += current_ciphertext_chunk
-
-        diffblock = current_ciphertext_chunk
-
-    return ciphertext
-
-
-def decrypt(key, iv, ciphertext):
-    cipher = AES.new(key, AES.MODE_ECB)
-
-    plaintext = b''
-
-    diffblock = iv
-
-    for chunk in divide(ciphertext, 16):
-        xor_bytes = cipher.decrypt(chunk)
-
-        current_plaintext_chunk = fixed_xor(xor_bytes, diffblock)
-
-        plaintext += current_plaintext_chunk
-
-        diffblock = chunk
-
-    return plaintext
-
+from libpals.util import (
+    divide,
+    fixed_xor,
+    aes_128_cbc_decrypt,
+    aes_128_cbc_encrypt
+)
 
 key = b'YELLOW SUBMARINE'
 
@@ -49,7 +14,7 @@ iv = b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
 
 ciphertext = b64decode(open('data/10.txt', 'r').read())
 
-plaintext= decrypt(key, iv, ciphertext)
+plaintext= aes_128_cbc_decrypt(key, iv, ciphertext)
 
 output_message = """SET 02 PROBLEM 10: Implement CBC mode
 
