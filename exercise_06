@@ -3,17 +3,7 @@
 from base64 import b64decode
 from libpals.util import xor_repeatedkey, xor_find_multichar_key
 
-
-def get_indata(input_file):
-    indata = b''
-    with open(input_file) as input:
-        indata = "".join(line.strip() for line in input)
-    return indata
-
-
-indata = get_indata('data/6.txt')
-
-ciphertext = b64decode(indata)
+ciphertext = b64decode(open('data/6.txt', 'r').read())
 
 key_bytes = xor_find_multichar_key(ciphertext)
 
