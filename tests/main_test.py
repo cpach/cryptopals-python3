@@ -50,3 +50,13 @@ def test_transpose_4():
 def test_pkcs7pad_16_20():
     expected_bytes = b'YELLOW SUBMARINE\x04\x04\x04\x04'
     assert pkcs7pad(b'YELLOW SUBMARINE', 20) == expected_bytes
+
+
+def test_pkcs7pad_15_16():
+    expected_bytes = b'MY NOSE IS NUMB\x01'
+    assert pkcs7pad(b'MY NOSE IS NUMB', 16) == expected_bytes
+
+
+def test_pkcs7pad_16_16():
+    expected_bytes = b'MY NOSE IS NUMB!'
+    assert pkcs7pad(b'MY NOSE IS NUMB!', 16) == expected_bytes
