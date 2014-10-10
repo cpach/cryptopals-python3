@@ -6,7 +6,7 @@ from Crypto.Cipher import AES
 
 cipher = AES.new(b'YELLOW SUBMARINE', AES.MODE_ECB)
 
-ciphertext = b64decode(open('data/gist_3132853.txt', 'r').read())
+ciphertext = b64decode(open('data/7.txt', 'r').read())
 
 plaintext = cipher.decrypt(ciphertext)
 
