@@ -1,0 +1,103 @@
+#!/usr/bin/env python3
+
+from Crypto.Cipher import AES
+from os import urandom
+from random import SystemRandom
+from libpals.util import aes_128_cbc_encrypt, pkcs7pad, detect_ecb
+
+
+def encryption_oracle(input_bytes):
+    def extend_input():
+        prefix_length = SystemRandom().randint(5, 10)
+
+        suffix_length = SystemRandom().randint(5, 10)
+
+        prefix_bytes = urandom(prefix_length)
+
+        suffix_bytes = urandom(suffix_length)
+
+        result = prefix_bytes + input_bytes + suffix_bytes
+
+        return result
+
+
+    crypto_modes = ['ecb', 'cbc']
+
+    current_mode = SystemRandom().choice(crypto_modes)
+
+    plaintext = pkcs7pad(extend_input(), 16)
+
+    key = urandom(16)
+
+    ciphertext = b''
+
+    if current_mode == 'cbc':
+        iv = urandom(16)
+        ciphertext = aes_128_cbc_encrypt(key, iv, plaintext)
+    else:
+        cipher = AES.new(key, AES.MODE_ECB)
+        ciphertext = cipher.encrypt(plaintext)
+
+    result = {
+        'ciphertext': ciphertext,
+        'mode': current_mode
+    }
+
+    return result
+
+
+def determine_mode(ciphertext):
+        predicted_mode = ''
+
+        if detect_ecb(ciphertext) > 0:
+            predicted_mode = 'ecb'
+        else:
+            predicted_mode = 'cbc'
+
+        return predicted_mode
+
+
+def generate_specimens(n):
+    result = []
+
+    for _ in range(n):
+        number = SystemRandom().randint(0, 255)
+
+        char = bytes([number])
+
+        specimen = encryption_oracle(char * 43)
+
+        specimen['prediction'] = determine_mode(specimen['ciphertext'])
+
+        result.append(specimen)
+
+    return result
+
+
+def display_result(result_list):
+    for result in enumerate(result_list, start=1):
+        n = result[0]
+
+        specimen = result[1]
+
+        prediction_result  = ''
+
+        if specimen['mode'] == specimen['prediction']:
+            prediction_result = 'correctly predicted'
+        else:
+            prediction_result = 'INCORRECT PREDICTION'
+
+        output_message = """#{} | Mode: {} [{}]"""
+
+        print(output_message.format(n,
+                                    specimen['mode'].upper(),
+                                    prediction_result))
+
+
+print("""SET 02 PROBLEM 11: An ECB/CBC detection oracle
+
+Generating specimens...
+
+RESULTS:""")
+
+display_result(generate_specimens(30))
