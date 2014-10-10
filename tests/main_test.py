@@ -47,6 +47,6 @@ def test_transpose_4():
     assert transpose(chunks) == [b'ABCDEFG', b'HIJKLMN', b'OPQRST', b'UVWXYZ']
 
 
-def test_pkcs7pad():
+def test_pkcs7pad_16_20():
     expected_bytes = b'YELLOW SUBMARINE\x04\x04\x04\x04'
     assert pkcs7pad(b'YELLOW SUBMARINE', 20) == expected_bytes
