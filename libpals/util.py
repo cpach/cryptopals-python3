@@ -238,3 +238,8 @@ def aes_128_cbc_decrypt(key, iv, ciphertext):
         diffblock = chunk
 
     return plaintext
+
+
+def nearest_multiple(n, base):
+    # Based on code from http://stackoverflow.com/a/2272174
+    return int(base * round(float(n)/base))
