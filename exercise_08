@@ -2,7 +2,7 @@
 
 from binascii import hexlify
 from operator import itemgetter
-from libpals.util import xor_find_singlechar_key, divide
+from libpals.util import divide, xor_find_singlechar_key
 
 
 def rank_ciphertext(ciphertext):
