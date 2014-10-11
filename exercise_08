@@ -2,20 +2,7 @@
 
 from binascii import hexlify
 from operator import itemgetter
-from libpals.util import divide, xor_find_singlechar_key
-
-
-def detect_ecb(ciphertext):
-    chunks = divide(ciphertext, 16)
-
-    total_score = 0
-
-    for c in set(chunks):
-        score = chunks.count(c)
-        if score > 1:
-            total_score += score
-
-    return total_score
+from libpals.util import detect_ecb, divide, xor_find_singlechar_key
 
 
 def get_candidates(input_list):

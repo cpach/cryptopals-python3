@@ -247,3 +247,16 @@ def aes_128_cbc_decrypt(key, iv, ciphertext):
 def nearest_multiple(n, base):
     # Based on code from http://stackoverflow.com/a/2272174
     return int(base * round(float(n)/base))
+
+
+def detect_ecb(ciphertext):
+    chunks = divide(ciphertext, 16)
+
+    total_score = 0
+
+    for c in set(chunks):
+        score = chunks.count(c)
+        if score > 1:
+            total_score += score
+
+    return total_score
