@@ -5,7 +5,7 @@ from operator import itemgetter
 from libpals.util import divide, xor_find_singlechar_key
 
 
-def rank_ciphertext(ciphertext):
+def detect_ecb(ciphertext):
     chunks = divide(ciphertext, 16)
 
     total_score = 0
@@ -34,7 +34,7 @@ indata = [line.rstrip() for line in open('data/8.txt')]
 candidate_list = get_candidates(indata)
 
 for candidate in candidate_list:
-    candidate['score'] = rank_ciphertext(candidate['ciphertext'])
+    candidate['score'] = detect_ecb(candidate['ciphertext'])
 
 winner = max(candidate_list, key=itemgetter('score'))
 
