@@ -87,7 +87,7 @@ def display_result(result_list):
         else:
             prediction_result = 'INCORRECT PREDICTION'
 
-        output_message = """#{} | Mode: {} [{}]"""
+        output_message = """#{:0>2d} | Mode: {} [{}]"""
 
         print(output_message.format(n,
                                     specimen['mode'].upper(),
