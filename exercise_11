@@ -3,7 +3,7 @@
 from Crypto.Cipher import AES
 from os import urandom
 from random import SystemRandom
-from libpals.util import aes_128_cbc_encrypt, detect_ecb, pkcs7pad
+from libpals.util import aes_128_cbc_encrypt, ecb_or_cbc, pkcs7pad
 
 
 def encryption_oracle(input_bytes):
@@ -46,17 +46,6 @@ def encryption_oracle(input_bytes):
     return result
 
 
-def determine_mode(ciphertext):
-        predicted_mode = ''
-
-        if detect_ecb(ciphertext) > 0:
-            predicted_mode = 'ecb'
-        else:
-            predicted_mode = 'cbc'
-
-        return predicted_mode
-
-
 def generate_specimens(n):
     result = []
 
@@ -67,7 +56,7 @@ def generate_specimens(n):
 
         specimen = encryption_oracle(char * 43)
 
-        specimen['prediction'] = determine_mode(specimen['ciphertext'])
+        specimen['prediction'] = ecb_or_cbc(specimen['ciphertext'])
 
         result.append(specimen)
 

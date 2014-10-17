@@ -2,7 +2,7 @@
 
 from binascii import hexlify
 from operator import itemgetter
-from libpals.util import detect_ecb, divide, xor_find_singlechar_key
+from libpals.util import ecb_or_cbc, divide, xor_find_singlechar_key
 
 
 def get_candidates(input_list):
@@ -29,7 +29,7 @@ indata = [line.rstrip() for line in open('data/8.txt')]
 
 candidate_list = get_candidates(indata)
 
-winners = [x for x in candidate_list if detect_ecb(x['ciphertext'])]
+winners = [x for x in candidate_list if ecb_or_cbc(x['ciphertext']) == 'ecb']
 
 print("""SET 01 PROBLEM 08: Detect AES in ECB mode""")
 

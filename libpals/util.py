@@ -249,7 +249,15 @@ def nearest_multiple(n, base):
     return int(base * round(float(n)/base))
 
 
-def detect_ecb(ciphertext):
+def ecb_or_cbc(ciphertext):
+    """Detect if a ciphertext is encrypted with ECB or CBC."""
+
+    # In challenges 7-12 the crypto mode is either ECB or CBC. So any
+    # ciphertext with no repeating blocks is considered to be encrypted with
+    # CBC.
+
+    mode = ''
+
     chunks = divide(ciphertext, 16)
 
     total_score = 0
@@ -259,4 +267,9 @@ def detect_ecb(ciphertext):
         if score > 1:
             total_score += score
 
-    return total_score
+    if total_score > 1:
+        mode = 'ecb'
+    else:
+        mode = 'cbc'
+
+    return mode
