@@ -3,7 +3,7 @@
 from Crypto.Cipher import AES
 from os import urandom
 from random import SystemRandom
-from libpals.util import aes_128_cbc_encrypt, pkcs7pad, detect_ecb
+from libpals.util import aes_128_cbc_encrypt, detect_ecb, pkcs7pad
 
 
 def encryption_oracle(input_bytes):
