@@ -16,21 +16,21 @@ def get_candidates(input_list):
     return candidate_list
 
 
+def display_result(winner_list):
+    for winner in winner_list:
+        hex_string = str(object=hexlify(winner['ciphertext']),
+                         encoding='utf-8')
+        print("""%""")
+        print("""Line number: {}""".format(winner['line_number']))
+        print("""Ciphertext (hex): {}""".format(hex_string))
+
+
 indata = [line.rstrip() for line in open('data/8.txt')]
 
 candidate_list = get_candidates(indata)
 
-for candidate in candidate_list:
-    candidate['score'] = detect_ecb(candidate['ciphertext'])
+winners = [x for x in candidate_list if detect_ecb(x['ciphertext'])]
 
-winner = max(candidate_list, key=itemgetter('score'))
+print("""SET 01 PROBLEM 08: Detect AES in ECB mode""")
 
-output_message = """SET 01 PROBLEM 08: Detect AES in ECB mode
-Line number: {}
-Score [i.e. the number of repeated 16-byte blocks]: {}
-Ciphertext (hex): {}"""
-
-print(output_message.format(winner['line_number'],
-                            winner['score'],
-                            str(object=hexlify(winner['ciphertext']),
-                                encoding='utf-8')))
+display_result(winners)
