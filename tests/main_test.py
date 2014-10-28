@@ -5,7 +5,8 @@ from libpals.util import (
     hamming_distance,
     fixed_xor,
     transpose,
-    pkcs7pad
+    pkcs7pad,
+    nearest_multiple
 )
 
 def test_xor_find_singlechar_key():
@@ -60,3 +61,15 @@ def test_pkcs7pad_15_16():
 def test_pkcs7pad_16_16():
     expected_bytes = b'MY NOSE IS NUMB!'
     assert pkcs7pad(b'MY NOSE IS NUMB!', 16) == expected_bytes
+
+
+def test_nearest_multiple_5():
+    assert nearest_multiple(34, 5) == 35
+
+
+def test_nearest_multiple_66():
+    assert nearest_multiple(79, 66) == 132
+
+
+def test_nearest_multiple_16():
+    assert nearest_multiple(0, 16) == 0

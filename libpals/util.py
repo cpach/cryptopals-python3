@@ -245,8 +245,10 @@ def aes_128_cbc_decrypt(key, iv, ciphertext):
 
 
 def nearest_multiple(n, base):
-    # Based on code from http://stackoverflow.com/a/2272174
-    return int(base * round(float(n)/base))
+    """Round ”n” up to the nearest multiple of ”base”"""
+    # Based on code from https://stackoverflow.com/a/8866125/3335987
+    result = n if n % base == 0 else n + base - n % base
+    return result
 
 
 def ecb_or_cbc(ciphertext):
