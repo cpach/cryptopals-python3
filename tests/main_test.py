@@ -73,3 +73,13 @@ def test_nearest_multiple_66():
 
 def test_nearest_multiple_16():
     assert nearest_multiple(0, 16) == 0
+
+
+def test_padding_20():
+    expected_result = b'YELLOW SUBMARINE\x04\x04\x04\x04'
+    assert pkcs7pad(b'YELLOW SUBMARINE', 20) == expected_result
+
+
+def test_padding_32():
+    expected_result = b'Bo Derek ruined my life!\x08\x08\x08\x08\x08\x08\x08\x08'
+    assert pkcs7pad(b'Bo Derek ruined my life!', 32) == expected_result
