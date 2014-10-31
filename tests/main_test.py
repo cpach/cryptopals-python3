@@ -48,11 +48,6 @@ def test_transpose_4():
     assert transpose(chunks) == [b'ABCDEFG', b'HIJKLMN', b'OPQRST', b'UVWXYZ']
 
 
-def test_pkcs7pad_16_20():
-    expected_bytes = b'YELLOW SUBMARINE\x04\x04\x04\x04'
-    assert pkcs7pad(b'YELLOW SUBMARINE', 20) == expected_bytes
-
-
 def test_pkcs7pad_15_16():
     expected_bytes = b'MY NOSE IS NUMB\x01'
     assert pkcs7pad(b'MY NOSE IS NUMB', 16) == expected_bytes
@@ -61,6 +56,16 @@ def test_pkcs7pad_15_16():
 def test_pkcs7pad_16_16():
     expected_bytes = b'MY NOSE IS NUMB!'
     assert pkcs7pad(b'MY NOSE IS NUMB!', 16) == expected_bytes
+
+
+def test_pkcs7pad_16_20():
+    expected_bytes = b'YELLOW SUBMARINE\x04\x04\x04\x04'
+    assert pkcs7pad(b'YELLOW SUBMARINE', 20) == expected_bytes
+
+
+def test_pkcs7pad_24_32():
+    expected_result = b'Bo Derek ruined my life!\x08\x08\x08\x08\x08\x08\x08\x08'
+    assert pkcs7pad(b'Bo Derek ruined my life!', 32) == expected_result
 
 
 def test_nearest_multiple_5():
@@ -73,13 +78,3 @@ def test_nearest_multiple_66():
 
 def test_nearest_multiple_16():
     assert nearest_multiple(0, 16) == 0
-
-
-def test_pkcs7pad_20():
-    expected_result = b'YELLOW SUBMARINE\x04\x04\x04\x04'
-    assert pkcs7pad(b'YELLOW SUBMARINE', 20) == expected_result
-
-
-def test_pkcs7pad_32():
-    expected_result = b'Bo Derek ruined my life!\x08\x08\x08\x08\x08\x08\x08\x08'
-    assert pkcs7pad(b'Bo Derek ruined my life!', 32) == expected_result
