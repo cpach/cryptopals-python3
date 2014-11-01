@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import pytest
+
 from libpals.util import (
     xor_find_singlechar_key,
     hamming_distance,
@@ -58,7 +60,7 @@ def test_pkcs7pad_15_16():
 
 
 def test_pkcs7pad_16_16():
-    expected_bytes = b'MY NOSE IS NUMB!'
+    expected_bytes = b'MY NOSE IS NUMB!\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10'
     assert pkcs7pad(b'MY NOSE IS NUMB!', 16) == expected_bytes
 
 
@@ -75,6 +77,18 @@ def test_pkcs7pad_16_20():
 def test_pkcs7pad_24_32():
     expected_result = b'Bo Derek ruined my life!\x08\x08\x08\x08\x08\x08\x08\x08'
     assert pkcs7pad(b'Bo Derek ruined my life!', 32) == expected_result
+
+
+def test_pkcs7pad_3_1():
+    with pytest.raises(ValueError) as excinfo:
+        pkcs7pad(b'FOO', 1)
+    assert 'Invalid value for ”k”.' in str(excinfo.value)
+
+
+def test_pkcs7pad_3_256():
+    with pytest.raises(ValueError) as excinfo:
+        pkcs7pad(b'FOO', 256)
+    assert 'Invalid value for ”k”.' in str(excinfo.value)
 
 
 def test_nearest_multiple_5():

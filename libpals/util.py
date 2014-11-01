@@ -198,11 +198,10 @@ def xor_find_multichar_key(ciphertext):
 def pkcs7pad(input_bytes, k):
     # Source: RFC 2315, section 10.3, note #2
     l = len(input_bytes)
-    if l == k:
-        result = input_bytes
-    else:
-        n = k - (l % k)
-        result = input_bytes + (n * bytes([n]))
+    if k <= 1 or k >= 256:
+        raise ValueError('Invalid value for ”k”.')
+    n = k - (l % k)
+    result = input_bytes + (n * bytes([n]))
     return result
 
 
