@@ -1,5 +1,25 @@
 MATASANO CRYPTO CHALLENGES
 
-Solutions in Python 3 by Carl Winbäck
-E-mail: c@tunnel53.net
+These are my (Carl Winbäck’s) solutions to the Matasano Crypto Challenges.
+
+My solutions are written in Python 3.
+
+ATTENTION: Before you look at this code I urge you to first try solving the
+challenges yourself. They are very fun and you’ll learn more that way.
+
+More info about the challenges can be found at the official web site:
+http://cryptopals.com/
+
+
+NEED HELP WITH THE CHALLENGES?
+Join the IRC channel #cryptopals on Freenode.
+
+
+DEPENDENCIES
+The unit tests need pytest [http://pytest.org/]. Otherwise I don’t think there
+are any external dependencies.
+
+
+MY CONTACT INFORMATION
 Twitter: @giffengrabber
+E-mail: c (at) tunnel53 (dot) net
