@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# Copyright 2014 Carl Winbäck. See the COPYING file at the top-level directory
+# of this distribution.
+
 from binascii import hexlify
 from operator import itemgetter
 from libpals.util import ecb_or_cbc, divide, xor_find_singlechar_key

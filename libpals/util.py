@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# Copyright 2014 Carl Winbäck. See the COPYING file at the top-level directory
+# of this distribution.
+
 from Crypto.Cipher import AES
 from operator import itemgetter
 from itertools import combinations
