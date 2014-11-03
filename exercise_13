@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+
+# Copyright 2014 Carl Winbäck. See the COPYING file at the top-level directory
+# of this distribution.
+
+from Crypto.Cipher import AES
+from os import urandom
+from random import SystemRandom
+import re
+from libpals.util import pkcs7pad, pkcs7pad_remove
+
+# Some assumptions:
+#
+# A) The attacker is aware of the ”profile format”. (E.g.
+# ”email=foo@bar.com&uid=10&role=user”)
+#
+# B) The attacker-provided string doesn’t have to be a valid e-mail address.
+#
+# C) The attacker can insert padding. (I.e. non-printable ASCII characters.)
+
+SECRET_KEY = urandom(16)
+
+
+def parse(input_string):
+    list_of_pairs = input_string.split(sep="&")
+    result = {}
+    for kv_string in list_of_pairs:
+        kv_pair = kv_string.split(sep="=")
+        key = kv_pair[0]
+        value = kv_pair[1]
+        result[key] = value
+    return result
+
+
+def generate_profile(email_address):
+    sanitized_address = re.sub('[&=]', '', email_address)
+    uid = SystemRandom().randint(1, 99)
+    result = """email={}&uid={:0>2d}&role=user""".format(sanitized_address,
+                                                         uid)
+    return result
+
+
+def encrypt(input_string):
+    cipher = AES.new(SECRET_KEY, AES.MODE_ECB)
+    input_bytes = input_string.encode('ascii')
+    plaintext = pkcs7pad(input_bytes, 16)
+    ciphertext = cipher.encrypt(plaintext)
+    return ciphertext
+
+
+def decrypt(ciphertext):
+    cipher = AES.new(SECRET_KEY, AES.MODE_ECB)
+    plaintext_bytes = pkcs7pad_remove(cipher.decrypt(ciphertext))
+    plaintext_string = plaintext_bytes.decode('ascii')
+    return plaintext_string
+
+
+attacker_input = ('XXXXXXXXXXadmin\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b'
+                  'XXXXXXX@example.com')
+
+original_ciphertext = encrypt(generate_profile(attacker_input))
+
+# By rearranging the ciphertext, Mallory can influence the resulting plaintext.
+evil_ciphertext = original_ciphertext[0:64] + original_ciphertext[16:32]
+
+# Creating a profile from the modified ciphertext
+profile = parse(decrypt(evil_ciphertext))
+
+output_message = """SET 02 PROBLEM 13: ECB cut-and-paste
+
+Attacker input: {}
+
+Resulting profile: {}"""
+
+print(output_message.format(repr(attacker_input),
+                            profile))
