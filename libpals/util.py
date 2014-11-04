@@ -208,6 +208,16 @@ def pkcs7pad(input_bytes, k):
     return result
 
 
+def pkcs7pad_remove(input_bytes):
+    last_byte_value = input_bytes[-1]
+    length_without_padding = len(input_bytes) - last_byte_value
+    expected_padding = bytes([last_byte_value]) * last_byte_value
+    padding_block = input_bytes[-last_byte_value:]
+    if padding_block != expected_padding:
+        raise ValueError('Invalid padding.')
+    return input_bytes[0:length_without_padding]
+
+
 def aes_128_cbc_encrypt(key, iv, plaintext):
     cipher = AES.new(key, AES.MODE_ECB)
 

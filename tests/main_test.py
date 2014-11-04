@@ -11,7 +11,8 @@ from libpals.util import (
     fixed_xor,
     transpose,
     pkcs7pad,
-    nearest_multiple
+    nearest_multiple,
+    pkcs7pad_remove
 )
 
 def test_xor_find_singlechar_key():
@@ -86,6 +87,21 @@ def test_pkcs7pad_3_1():
     with pytest.raises(ValueError) as excinfo:
         pkcs7pad(b'FOO', 1)
     assert 'Invalid value for ”k”.' in str(excinfo.value)
+
+
+def test_pkcs7pad_remove_2():
+    assert pkcs7pad_remove(b'=)\x02\x02') == b'=)'
+
+
+def test_pkcs7pad_remove_4():
+    padded_bytes = b'YELLOW SUBMARINE\x04\x04\x04\x04'
+    assert pkcs7pad_remove(padded_bytes) == b'YELLOW SUBMARINE'
+
+
+def test_pkcs7pad_remove_invalid():
+    with pytest.raises(ValueError) as excinfo:
+        pkcs7pad_remove(b'YELLOW SUBMARINE\x00\x04\x04\x04')
+    assert 'Invalid padding.' in str(excinfo.value)
 
 
 def test_pkcs7pad_3_256():
