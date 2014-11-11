@@ -15,11 +15,6 @@ NEED HELP WITH THE CHALLENGES?
 Join the IRC channel #cryptopals on Freenode.
 
 
-DEPENDENCIES
-The unit tests need pytest [http://pytest.org/]. Otherwise I don’t think there
-are any external dependencies.
-
-
 COMPLETED CHALLENGES
 ☑  1. Convert hex to base64
 ☑  2. Fixed XOR
@@ -38,6 +33,11 @@ COMPLETED CHALLENGES
 
 LICENSE
 BSD (See the COPYING file)
+
+
+DEPENDENCIES
+The unit tests need pytest [http://pytest.org/]. Otherwise I don’t think there
+are any external dependencies.
 
 
 MY CONTACT INFORMATION
