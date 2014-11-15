@@ -93,14 +93,31 @@ def test_pkcs7pad_remove_2():
     assert pkcs7pad_remove(b'=)\x02\x02') == b'=)'
 
 
-def test_pkcs7pad_remove_4():
+def test_pkcs7pad_remove_4a():
     padded_bytes = b'YELLOW SUBMARINE\x04\x04\x04\x04'
     assert pkcs7pad_remove(padded_bytes) == b'YELLOW SUBMARINE'
 
 
-def test_pkcs7pad_remove_invalid():
+def test_pkcs7pad_remove_4b():
+    padded_bytes = b'ICE ICE BABY\x04\x04\x04\x04'
+    assert pkcs7pad_remove(padded_bytes) == b'ICE ICE BABY'
+
+
+def test_pkcs7pad_remove_invalid_a():
     with pytest.raises(ValueError) as excinfo:
         pkcs7pad_remove(b'YELLOW SUBMARINE\x00\x04\x04\x04')
+    assert 'Invalid padding.' in str(excinfo.value)
+
+
+def test_pkcs7pad_remove_invalid_b():
+    with pytest.raises(ValueError) as excinfo:
+        pkcs7pad_remove(b'ICE ICE BABY\x05\x05\x05\x05')
+    assert 'Invalid padding.' in str(excinfo.value)
+
+
+def test_pkcs7pad_remove_invalid_b():
+    with pytest.raises(ValueError) as excinfo:
+        pkcs7pad_remove(b'ICE ICE BABY\x01\x02\x03\x04')
     assert 'Invalid padding.' in str(excinfo.value)
 
 
