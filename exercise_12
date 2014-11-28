@@ -53,7 +53,6 @@ def detect_plaintext_length():
 
 
 def crack():
-    ciphertext_length = len(encrypt(b''))
     blocksize = detect_blocksize()
     plaintext = b''
     plaintext_length = detect_plaintext_length()
