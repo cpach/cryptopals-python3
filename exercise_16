@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+
+# Copyright 2014 Carl Winbäck. See the COPYING file at the top-level directory
+# of this distribution.
+
+from os import urandom
+import re
+from libpals.util import (
+    aes_128_cbc_decrypt,
+    aes_128_cbc_encrypt,
+    numberlist_to_bytes,
+    pkcs7pad
+)
+
+SECRET_KEY = urandom(16)
+IV = urandom(16)
+
+
+def encrypt(user_input):
+    prefix = b'comment1=cooking%20MCs;userdata='
+    suffix = b';comment2=%20like%20a%20pound%20of%20bacon'
+    # Before encrypting we will remove any ampersands and equality signs, just
+    # like in challenge 13.
+    sanitized_user_input = re.sub(b'[&=]', b'', user_input)
+    plaintext = pkcs7pad(prefix + sanitized_user_input + suffix, 16)
+    ciphertext = aes_128_cbc_encrypt(SECRET_KEY, IV, plaintext)
+    return ciphertext
+
+
+def is_admin(ciphertext):
+    plaintext = aes_128_cbc_decrypt(SECRET_KEY, IV, ciphertext)
+    if re.search(b';admin=true;', plaintext):
+        return True
+    else:
+        return False
+
+
+def attack(ciphertext):
+    ciphertext_list = list(ciphertext)
+    byte_x = ciphertext_list[37]
+    ciphertext_list[37] = byte_x ^ 1
+    byte_y = ciphertext_list[43]
+    ciphertext_list[43] = byte_y ^ 64
+    result = numberlist_to_bytes(ciphertext_list)
+    return result
+
+
+# By crafting our input carefully we only need to flip two bits in the
+# ciphertext in order to get the desired result.
+plaintext_injection = b'LOOSE BITS SINK CHIPS:admin}true'
+original_ciphertext = encrypt(plaintext_injection)
+modified_ciphertext = attack(original_ciphertext)
+result = is_admin(modified_ciphertext)
+
+output_message = """SET 02 PROBLEM 16: CBC bitflipping attacks
+
+Input: {}
+
+Is admin? {}
+"""
+
+print(output_message.format(plaintext_injection.decode('ascii'),
+                            result))
