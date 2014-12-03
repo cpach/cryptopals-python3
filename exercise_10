@@ -17,7 +17,7 @@ iv = b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
 
 ciphertext = b64decode(open('data/10.txt', 'r').read())
 
-plaintext= aes_128_cbc_decrypt(key, iv, ciphertext)
+plaintext = aes_128_cbc_decrypt(key, iv, ciphertext)
 
 output_message = """SET 02 PROBLEM 10: Implement CBC mode
 
