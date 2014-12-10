@@ -287,3 +287,12 @@ def ecb_or_cbc(ciphertext):
         mode = 'cbc'
 
     return mode
+
+
+def numberlist_to_bytes(list_of_numbers):
+    result = b''
+    for char in list_of_numbers:
+        if not 0 <= char <= 255:
+            raise ValueError('All integers need to be in the range 0-255.')
+        result += bytes([char])
+    return result

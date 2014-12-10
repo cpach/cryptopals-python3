@@ -12,7 +12,8 @@ from libpals.util import (
     transpose,
     pkcs7pad,
     nearest_multiple,
-    pkcs7pad_remove
+    pkcs7pad_remove,
+    numberlist_to_bytes
 )
 
 def test_xor_find_singlechar_key():
@@ -137,3 +138,19 @@ def test_nearest_multiple_66():
 
 def test_nearest_multiple_16():
     assert nearest_multiple(0, 16) == 0
+
+
+def test_numberlist_to_bytes():
+    assert numberlist_to_bytes([102, 111, 111]) == b'foo'
+
+
+def test_numberlist_to_bytes_large():
+    with pytest.raises(ValueError) as excinfo:
+        numberlist_to_bytes([1, 2, 300])
+    assert 'All integers need to be in the range 0-255.' in str(excinfo.value)
+
+
+def test_numberlist_to_bytes_negative():
+    with pytest.raises(ValueError) as excinfo:
+        numberlist_to_bytes([1, 2, -3])
+    assert 'All integers need to be in the range 0-255.' in str(excinfo.value)
