@@ -1,78 +1,13 @@
 #!/usr/bin/env python3
 
-# Copyright 2014 Carl Winbäck. See the COPYING file at the top-level directory
+# Copyright 2016 Carl Winbäck. See the COPYING file at the top-level directory
 # of this distribution.
 
-from base64 import b64decode
-from Crypto.Cipher import AES
-from os import urandom
-from libpals.util import ecb_or_cbc, nearest_multiple, pkcs7pad
+from libpals.util import ecb_or_cbc, StaticOracle, StaticOracleCracker
 
-SECRET_KEY = urandom(16)
-SECRET_MESSAGE = (b'Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbX'
-                  b'kgaGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBzdGFuZGJ5IHdhdmlu'
-                  b'ZyBqdXN0IHRvIHNheSBoaQpEaWQgeW91IHN0b3A/IE5vLCBJIGp1c3QgZH'
-                  b'JvdmUgYnkK')
-SECRET_BYTES = b64decode(SECRET_MESSAGE)
-
-
-def encrypt(input_bytes):
-    cipher = AES.new(SECRET_KEY, AES.MODE_ECB)
-    plaintext = pkcs7pad(input_bytes + SECRET_BYTES, 16)
-    ciphertext = cipher.encrypt(plaintext)
-    return ciphertext
-
-
-def detect_blocksize():
-    input_bytes = b'A'
-    initial_length = len(encrypt(b''))
-    step = 0
-    while step <= initial_length:
-        input_bytes += b'A'
-        step = len(encrypt(input_bytes))
-    blocksize = step - initial_length
-    return blocksize
-
-
-def detect_plaintext_length():
-    def detect_padding_length():
-        initial_length = len(encrypt(b''))
-        current_length = 0
-        i = 0
-        while current_length <= initial_length:
-            current_length = len(encrypt(i * b'A'))
-            i += 1
-        padding_length = i - 1
-        return padding_length
-
-
-    max_possible_length = len(encrypt(b''))
-    padding_length = detect_padding_length()
-    actual_length = max_possible_length - padding_length
-    return actual_length
-
-
-def crack():
-    blocksize = detect_blocksize()
-    plaintext = b''
-    plaintext_length = detect_plaintext_length()
-    for ciphertext_index in range(1, plaintext_length + 1):
-        block_end = nearest_multiple(ciphertext_index, blocksize)
-        block_start = block_end - blocksize
-        filler = b'A' * (block_end - ciphertext_index)
-        byte_dictionary = {}
-        for byte_index in range(0, 256):
-            char = bytes([byte_index])
-            ciphertext = encrypt(filler + plaintext + char)
-            byte_dictionary[ciphertext[block_start:block_end]] = char
-        comparison_block = encrypt(filler)[block_start:block_end]
-        current_plaintext_byte = byte_dictionary[comparison_block]
-        plaintext += current_plaintext_byte
-    return plaintext
-
-
-mode = ecb_or_cbc(encrypt(b'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'))
-plaintext_string = crack().decode(encoding='ascii')
+oracle = StaticOracle()
+cracker = StaticOracleCracker(oracle)
+mode = ecb_or_cbc(oracle.encrypt(b'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'))
 
 output_message = """SET 02 CHALLENGE 12: Byte-at-a-time ECB decryption (Simple)
 
@@ -83,4 +18,4 @@ Plaintext:
 {}"""
 
 print(output_message.format(mode.upper(),
-                            plaintext_string))
+                            cracker.crack().decode(encoding='ascii')))

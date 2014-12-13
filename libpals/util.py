@@ -1,11 +1,151 @@
 #!/usr/bin/env python3
 
-# Copyright 2014 Carl Winbäck. See the COPYING file at the top-level directory
+# Copyright 2016 Carl Winbäck. See the COPYING file at the top-level directory
 # of this distribution.
 
 from Crypto.Cipher import AES
+from collections import Counter
 from operator import itemgetter
 from itertools import combinations
+from base64 import b64decode
+from os import urandom
+from random import SystemRandom
+
+
+class Oracle(object):
+    def __init__(self):
+        encoded_secret = (b'Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd2'
+                          b'4gc28gbXkgaGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBz'
+                          b'dGFuZGJ5IHdhdmluZyBqdXN0IHRvIHNheSBoaQpEaWQgeW91IH'
+                          b'N0b3A/IE5vLCBJIGp1c3QgZHJvdmUgYnkK')
+        self.__SECRET_KEY = urandom(16)
+        self._SECRET_MESSAGE = b64decode(encoded_secret)
+
+    def encrypt(self, input_bytes):
+        cipher = AES.new(self.__SECRET_KEY, AES.MODE_ECB)
+        payload = self._generate_payload(input_bytes)
+        ciphertext = cipher.encrypt(pkcs7pad(payload, 16))
+        return ciphertext
+
+
+class StaticOracle(Oracle):
+
+    def _generate_payload(self, user_input):
+        return user_input + self._SECRET_MESSAGE
+
+
+class IrregularOracle(Oracle):
+
+    def _generate_random_prefix(self):
+        return urandom(SystemRandom().randint(1, 40))
+
+    def _generate_payload(self, user_input):
+        # I opted to make IrregularOracle change the prefix on every call,
+        # mainly because I thought it was more fun that way.
+        random_prefix = self._generate_random_prefix()
+        return random_prefix + user_input + self._SECRET_MESSAGE
+
+
+class OracleCracker(object):
+    def __init__(self, oracle):
+        # For the IrregularOracle we will assume the blocksize is 16. For
+        # StaticOracle, the blocksize will be determined.
+        self.blocksize = 16
+        self.oracle = oracle
+        self._filler_offset = 0
+
+    def __detect_padding_length(self):
+        initial_length = len(self._get_desired_output(b''))
+        current_length = 0
+        i = 0
+        while current_length <= initial_length:
+            current_length = len(self._get_desired_output(i * b'A'))
+            i += 1
+        padding_length = i - 1
+        return padding_length
+
+    def _detect_plaintext_length(self):
+        max_possible_length = len(self._get_desired_output(b''))
+        padding_length = self.__detect_padding_length()
+        actual_length = (max_possible_length - padding_length -
+                         self._filler_offset)
+        return actual_length
+
+    def crack(self):
+        plaintext = b''
+        plaintext_length = self._detect_plaintext_length()
+        for ciphertext_index in range(1, plaintext_length + 1):
+            block_end = (nearest_multiple(ciphertext_index, self.blocksize) +
+                         self._filler_offset)
+            block_start = block_end - self.blocksize
+            filler_length = block_end - ciphertext_index - self._filler_offset
+            filler = b'A' * filler_length
+            byte_dictionary = {}
+            for byte_index in range(0, 256):
+                char = bytes([byte_index])
+                teaser_block = (b'A' * filler_length) + plaintext + char
+                ciphertext = self._get_desired_output(teaser_block)
+                byte_dictionary[ciphertext[block_start:block_end]] = char
+            comparison_ciphertext = self._get_desired_output(filler)
+            comparison_block = comparison_ciphertext[block_start:block_end]
+            current_plaintext_byte = byte_dictionary[comparison_block]
+            plaintext += current_plaintext_byte
+        return plaintext
+
+
+class StaticOracleCracker(OracleCracker):
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.blocksize = self.__detect_blocksize()
+
+    def __detect_blocksize(self):
+        input_bytes = b'A'
+        initial_length = len(self.oracle.encrypt(b''))
+        step = 0
+        while step <= initial_length:
+            input_bytes += b'A'
+            step = len(self.oracle.encrypt(input_bytes))
+        blocksize = step - initial_length
+        return blocksize
+
+    def _get_desired_output(self, input_bytes):
+        return self.oracle.encrypt(input_bytes)
+
+
+class IrregularOracleCracker(OracleCracker):
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        self._filler_offset = 32
+        self._idblock_plaintext = urandom(16)
+        self._idblock_ciphertext = self.\
+          _determine_ciphertext(self._idblock_plaintext)
+
+    def _determine_ciphertext(self, plaintext):
+        """Determine likely ciphertext for a given plaintext."""
+        candidates = []
+        while len(candidates) < 40:
+            oracle_output = self.oracle.encrypt(plaintext + plaintext)
+            block_a = oracle_output[16:32]
+            block_b = oracle_output[32:48]
+            if block_a == block_b:
+                candidates.append(block_a)
+        winner = Counter(candidates).most_common(1)[0][0]
+        return winner
+
+    def _get_desired_output(self, input_bytes):
+        # By using the ”ID block” we can identify ciphertexts where the prefix
+        # is 16 bytes long. When the prefix is 16 bytes long we know how long
+        # the padding block will be and we can determine the plaintext length.
+        output = b''
+        while len(output) == 0:
+            ciphertext = self.oracle.encrypt(self._idblock_plaintext +
+                                             input_bytes)
+            if ciphertext[16:32] == self._idblock_ciphertext:
+                output = ciphertext
+        return output
+
 
 character_frequency = {
     'e': 27,
