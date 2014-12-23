@@ -89,7 +89,7 @@ def crack():
     plaintext_length = detect_plaintext_length()
     for ciphertext_index in range(1, plaintext_length + 1):
         block_end = nearest_multiple(ciphertext_index, blocksize) + 32
-        block_start = (block_end - blocksize)
+        block_start = block_end - blocksize
         filler = b'A' * (block_end - ciphertext_index - 32)
         byte_dictionary = {}
         for byte_index in range(0, 256):
