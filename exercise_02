@@ -14,7 +14,7 @@ result_bytes = fixed_xor(bytes.fromhex(input_a), bytes.fromhex(input_b))
 
 result_string = str(object=hexlify(result_bytes), encoding='utf-8')
 
-output_message = """SET 01 PROBLEM 02: Fixed XOR
+output_message = """SET 01 CHALLENGE 02: Fixed XOR
 First buffer:  {}
 Second buffer: {}
 Result:        {}"""

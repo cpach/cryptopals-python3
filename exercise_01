@@ -13,7 +13,7 @@ output_bytes = b64encode(input_bytes)
 
 output_string = str(object=output_bytes, encoding='utf-8')
 
-output_message = """SET 01 PROBLEM 01: Convert hex to base64 and back
+output_message = """SET 01 CHALLENGE 01: Convert hex to base64 and back
 Hex input:        {}
 Output in Base64: {}"""
 

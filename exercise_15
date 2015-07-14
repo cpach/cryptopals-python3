@@ -11,7 +11,7 @@ from libpals.util import pkcs7pad_remove
 input_bytes = b'ICE ICE BABY\x04\x04\x04\x04'
 result_bytes = pkcs7pad_remove(input_bytes)
 
-output_message = """SET 02 PROBLEM 15: PKCS#7 padding validation
+output_message = """SET 02 CHALLENGE 15: PKCS#7 padding validation
 
 Input: {}
 Result: {}"""

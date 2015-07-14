@@ -16,7 +16,7 @@ plaintext_bytes = xor_repeatedkey(ciphertext, key_bytes)
 
 plaintext_excerpt = str(object=plaintext_bytes[:242], encoding='utf-8')
 
-output_message = """SET 01 PROBLEM 06: Break repeating-key XOR
+output_message = """SET 01 CHALLENGE 06: Break repeating-key XOR
 Key: {}
 
 Plaintext (first 242 bytes):

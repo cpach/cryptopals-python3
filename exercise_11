@@ -86,7 +86,7 @@ def display_result(result_list):
                                     prediction_result))
 
 
-print("""SET 02 PROBLEM 11: An ECB/CBC detection oracle
+print("""SET 02 CHALLENGE 11: An ECB/CBC detection oracle
 
 Generating specimens...
 

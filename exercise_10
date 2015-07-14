@@ -19,7 +19,7 @@ ciphertext = b64decode(open('data/10.txt', 'r').read())
 
 plaintext = aes_128_cbc_decrypt(key, iv, ciphertext)
 
-output_message = """SET 02 PROBLEM 10: Implement CBC mode
+output_message = """SET 02 CHALLENGE 10: Implement CBC mode
 
 Plaintext (first 242 bytes):
 

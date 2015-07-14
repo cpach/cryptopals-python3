@@ -102,7 +102,7 @@ def crack():
     return plaintext
 
 
-output_message = """SET 02 PROBLEM 14: Byte-at-a-time ECB decryption (Harder)
+output_message = """SET 02 CHALLENGE 14: Byte-at-a-time ECB decryption (Harder)
 
 Plaintext:
 """

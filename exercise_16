@@ -50,7 +50,7 @@ original_ciphertext = encrypt(plaintext_injection)
 modified_ciphertext = attack(original_ciphertext)
 result = is_admin(modified_ciphertext)
 
-output_message = """SET 02 PROBLEM 16: CBC bitflipping attacks
+output_message = """SET 02 CHALLENGE 16: CBC bitflipping attacks
 
 Input: {}
 

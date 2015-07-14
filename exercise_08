@@ -34,6 +34,6 @@ candidate_list = get_candidates(indata)
 
 winners = [x for x in candidate_list if ecb_or_cbc(x['ciphertext']) == 'ecb']
 
-print("""SET 01 PROBLEM 08: Detect AES in ECB mode""")
+print("""SET 01 CHALLENGE 08: Detect AES in ECB mode""")
 
 display_result(winners)

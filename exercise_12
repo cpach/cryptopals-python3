@@ -74,7 +74,7 @@ def crack():
 mode = ecb_or_cbc(encrypt(b'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'))
 plaintext_string = crack().decode(encoding='ascii')
 
-output_message = """SET 02 PROBLEM 12: Byte-at-a-time ECB decryption (Simple)
+output_message = """SET 02 CHALLENGE 12: Byte-at-a-time ECB decryption (Simple)
 
 Mode: {}
 

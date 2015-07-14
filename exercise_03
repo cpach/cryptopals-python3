@@ -13,7 +13,7 @@ result = xor_find_singlechar_key(ciphertext)
 
 plaintext = result['plaintext']
 
-output_message = """SET 01 PROBLEM 03: Single-character XOR Cipher
+output_message = """SET 01 CHALLENGE 03: Single-character XOR Cipher
 Input: {}
 Key:
   Decimal: {}

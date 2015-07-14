@@ -8,7 +8,7 @@ from libpals.util import pkcs7pad
 plaintext = b'YELLOW SUBMARINE'
 padded_plaintext = pkcs7pad(plaintext, 20)
 
-output_message = """SET 02 PROBLEM 09: Implement PKCS#7 padding
+output_message = """SET 02 CHALLENGE 09: Implement PKCS#7 padding
 Input: {}
 Result: {}"""
 

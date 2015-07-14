@@ -25,7 +25,7 @@ def get_winner(input_file):
 
 winner = get_winner('data/4.txt')
 
-output_message = """SET 01 PROBLEM 04: Detect single-character XOR
+output_message = """SET 01 CHALLENGE 04: Detect single-character XOR
 Key:
   Decimal: {}
   Hex: {}

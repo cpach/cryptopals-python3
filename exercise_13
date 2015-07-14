@@ -66,7 +66,7 @@ evil_ciphertext = original_ciphertext[0:64] + original_ciphertext[16:32]
 # Creating a profile from the modified ciphertext
 profile = parse(decrypt(evil_ciphertext))
 
-output_message = """SET 02 PROBLEM 13: ECB cut-and-paste
+output_message = """SET 02 CHALLENGE 13: ECB cut-and-paste
 
 Attacker input: {}
 

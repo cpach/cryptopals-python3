@@ -18,7 +18,7 @@ ciphertext = xor_repeatedkey(input_bytes, key_bytes)
 
 output_string = str(object=hexlify(ciphertext), encoding='utf-8')
 
-output_message = """SET 01 PROBLEM 05: Implement repeating-key XOR
+output_message = """SET 01 CHALLENGE 05: Implement repeating-key XOR
 Message: {}
 Key: {}
 Ciphertext: {}"""

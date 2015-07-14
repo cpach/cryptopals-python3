@@ -12,7 +12,7 @@ ciphertext = b64decode(open('data/7.txt', 'r').read())
 
 plaintext = cipher.decrypt(ciphertext)
 
-output_message = """SET 01 PROBLEM 07: AES in ECB Mode
+output_message = """SET 01 CHALLENGE 07: AES in ECB Mode
 
 Plaintext (first 242 bytes):
 
