@@ -11,10 +11,6 @@ More info about the challenges can be found at the official web site:
 http://cryptopals.com/
 
 
-NEED HELP WITH THE CHALLENGES?
-Join the IRC channel #cryptopals on Freenode.
-
-
 COMPLETED CHALLENGES
 ☑  1. Convert hex to base64
 ☑  2. Fixed XOR
@@ -39,10 +35,10 @@ BSD (See the COPYING file)
 
 
 DEPENDENCIES
-The unit tests need pytest [http://pytest.org/]. Otherwise I don’t think there
-are any external dependencies.
+PyCryptodome [https://www.pycryptodome.org/] and pytest [http://pytest.org/] for
+the unit tests.
 
 
 MY CONTACT INFORMATION
-Twitter: https://twitter.com/giffengrabber
+WWW: https://www.tunnel53.net/
 E-mail: c (at) tunnel53 (dot) net
