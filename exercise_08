@@ -5,7 +5,7 @@
 
 from binascii import hexlify
 from operator import itemgetter
-from libpals.util import ecb_or_cbc, divide, xor_find_singlechar_key
+from libpals.util import ecb_or_cbc
 
 
 def get_candidates(input_list):
